@@ -110,3 +110,13 @@
 .table-cervejas-col-acoes {
 	width: 80px;
 }
+
+/* Colunas - Pesquisa de Estilos */
+.tabela-estilo-col-codigo {
+	width: 80px;
+	text-align: left;
+}
+
+.tabela-estilo-col-nome {
+	text-align: left;
+}
