@@ -24,7 +24,7 @@
 				<div class="col-sm-2">
 					<div class="aw-page-header-controls">
 						<a class="btn  btn-default" th:href="@{/cervejas}">
-							<i class="glyphicon  glyphicon-search"></i> <span class="hidden-xs  hidden-sm">Pesquisa</span>
+							<i class="glyphicon  glyphicon-search"></i> <span class="hidden-xs  hidden-sm">Pesquisa de cervejas</span>
 						</a>
 					</div>
 				</div>
@@ -33,8 +33,6 @@
 	</div>
 
 	<div class="container-fluid">
-		
-		
 		<form method="POST" th:object="${cerveja}" class="form-vertical  js-form-loading">
 			<brewer:message/>			
 	
