@@ -61,7 +61,7 @@ public class Cliente implements Serializable {
 	
 	@PrePersist @PreUpdate
 	public void prePersistPreUpdate() {
-		this.cpfOuCnpj = this.cpfOuCnpj.replaceAll("\\.|-|/", "");
+		this.cpfOuCnpj = TipoPessoa.removerFormatação(this.cpfOuCnpj);
 	}
 
 	public Long getCodigo() {
@@ -118,6 +118,10 @@ public class Cliente implements Serializable {
 
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
+	}
+	
+	public String getCpfOuCnpjSemFormatacao() {
+		return TipoPessoa.removerFormatação(this.cpfOuCnpj);
 	}
 
 	@Override
