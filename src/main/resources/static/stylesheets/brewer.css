@@ -120,3 +120,29 @@
 .tabela-estilo-col-nome {
 	text-align: left;
 }
+
+/* Colunas - Pesquisa de Clientes */
+.table-clientes-col-nome {
+	
+}
+
+.table-clientes-col-tipo-pessoa {
+	width: 120px;
+	text-align: center;
+	margin-right: 100px;
+}
+
+.table-clientes-col-cpf-cnpj {
+	width: 140px;
+	text-align: left;
+}
+
+.table-clientes-col-telefone {
+	width: 140px;
+	text-align: left;
+}
+
+.table-clientes-col-cidade-estado {
+	width: 140px;
+	text-align: left;
+}
