@@ -8,8 +8,9 @@
 }
 
 .bw-required > .control-label:after {
-	content: "*"
+	content: "*";
 }
+
 
 /*
 ######################
@@ -79,6 +80,11 @@
 ###################
 */
 
+/* Colunas comuns */
+.table-col-acoes {
+	width: 80px;
+}
+
 /* Colunas - Pesquisa de Cervejas */
 .table-cervejas-col-foto {
 	min-width: 50px;
@@ -112,13 +118,8 @@
 }
 
 /* Colunas - Pesquisa de Estilos */
-.tabela-estilo-col-codigo {
+.table-estilos-col-codigo {
 	width: 80px;
-	text-align: left;
-}
-
-.tabela-estilo-col-nome {
-	text-align: left;
 }
 
 /* Colunas - Pesquisa de Clientes */
@@ -129,22 +130,21 @@
 .table-clientes-col-tipo-pessoa {
 	width: 120px;
 	text-align: center;
-	margin-right: 100px;
 }
 
 .table-clientes-col-cpf-cnpj {
 	width: 140px;
-	text-align: left;
+	text-align: right;
 }
 
 .table-clientes-col-telefone {
 	width: 140px;
-	text-align: left;
+	text-align: right;
 }
 
 .table-clientes-col-cidade-estado {
 	width: 140px;
-	text-align: left;
+	text-align: right;
 }
 
 /* Colunas - Pesquisa de cidades */
@@ -157,12 +157,13 @@
 	text-align: right;
 }
 
+/*
 ######################################
 # CUSTOMIZAÇÃO DE COMPONENTES
 ######################################
 */
 
 .checkbox input[type="checkbox"]:checked + input + label::after {
-    font-family: 'FontAwesome';
-    content: "\f00c"; 
+  font-family: "FontAwesome";
+  content: "\f00c";
 }

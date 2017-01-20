@@ -47,7 +47,7 @@ public class Usuario implements Serializable {
 	
 	private Boolean ativo;
 	
-	//@NotNull(message = "Data de nascimento é obrigatório")
+	@NotNull(message = "Data de nascimento é obrigatório")
 	@Column(name = "data_nascimento")
 	private LocalDate dataNascimento;
 	
@@ -55,6 +55,10 @@ public class Usuario implements Serializable {
 	@ManyToMany
 	@JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "codigo_usuario"), inverseJoinColumns = @JoinColumn(name = "codigo_grupo"))
 	private List<Grupo> grupos;
+	
+	public boolean isNovo() {
+		return codigo == null;
+	}
 	
 	public Long getCodigo() {
 		return codigo;
