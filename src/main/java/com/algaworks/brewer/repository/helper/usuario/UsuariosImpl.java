@@ -1,12 +1,29 @@
 package com.algaworks.brewer.repository.helper.usuario;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
+import org.hibernate.sql.JoinType;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import com.algaworks.brewer.model.Grupo;
 import com.algaworks.brewer.model.Usuario;
+import com.algaworks.brewer.model.UsuarioGrupo;
+import com.algaworks.brewer.repository.filter.UsuarioFilter;
 
 public class UsuariosImpl implements UsuariosQueries {
 
@@ -27,5 +44,48 @@ public class UsuariosImpl implements UsuariosQueries {
 				.setParameter("usuario", usuario)
 				.getResultList();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Transactional(readOnly = true)
+	@Override
+	public List<Usuario> filtrar(UsuarioFilter usuarioFilter) {
+		Criteria criteria = manager.unwrap(Session.class).createCriteria(Usuario.class);
+		
+		criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+		adicionarFiltro(usuarioFilter, criteria);
+		
+		return criteria.list();
+	}
+
+	private void adicionarFiltro(UsuarioFilter usuarioFilter, Criteria criteria) {
+		
+		if (usuarioFilter != null) {
+			if (!StringUtils.isEmpty(usuarioFilter.getNome())) {
+				criteria.add(Restrictions.ilike("nome", usuarioFilter.getNome(), MatchMode.ANYWHERE));
+			}
+			
+			if (!StringUtils.isEmpty(usuarioFilter.getEmail())) {
+				criteria.add(Restrictions.ilike("email", usuarioFilter.getEmail(), MatchMode.START));
+			}
+			
+			criteria.createAlias("grupos", "g", JoinType.LEFT_OUTER_JOIN);
+			if (usuarioFilter.getGrupos() != null && !usuarioFilter.getGrupos().isEmpty()) {
+				List<Criterion> subqueries = new ArrayList<>();
+				
+				for (Long codigoGrupo : usuarioFilter.getGrupos().stream().mapToLong(Grupo::getCodigo).toArray()) {
+					DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UsuarioGrupo.class);
+					detachedCriteria.add(Restrictions.eq("id.grupo.codigo", codigoGrupo));
+					detachedCriteria.setProjection(Projections.property("id.usuario"));
+					
+					subqueries.add(Subqueries.propertyIn("codigo", detachedCriteria));
+				}
+				
+				Criterion[] criterions = new Criterion[subqueries.size()];
+				criteria.add(Restrictions.and(subqueries.toArray(criterions)));
+			}
+		}
+	}
+
+	
 
 }
