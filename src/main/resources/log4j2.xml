@@ -12,7 +12,7 @@
 		
 		<!-- <Logger name="org.hibernate.SQL" level="debug"/>  -->
 		
-		<Root level="info">
+		<Root level="error">
 			<AppenderRef ref="Console" />
 		</Root>
 	</Loggers>
