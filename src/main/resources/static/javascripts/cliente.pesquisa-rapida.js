@@ -7,7 +7,7 @@ Brewer.PesquisaRapidaCliente = (function() {
 		this.nomeInput = $('#nomeClienteModal');
 		this.pesquisaRapidaBtn = $('.js-pesquisa-rapida-cliente-btn');
 		this.containerTabelaPesquisaCliente = $('#containerTabelaPesquisaRapidaCliente');
-		this.htmlTabelaPesquisa = $('#tabela-pesquisa-rapida-cliente').html;
+		this.htmlTabelaPesquisa = $('#tabela-pesquisa-rapida-cliente').html();
 		this.template = Handlebars.compile(this.htmlTabelaPesquisa);
 		this.mensagemErro = $('.js-mensagem-erro');
 	}
@@ -15,6 +15,11 @@ Brewer.PesquisaRapidaCliente = (function() {
 	PesquisaRapidaCliente.prototype.iniciar = function() {
 		
 		this.pesquisaRapidaBtn.on('click', onPesquisaRapidaClicado.bind(this));
+		this.pesquisaRapidaClientesModal.on('shown.bs.modal', onShowModal.bind(this));
+	}
+	
+	function onShowModal() {
+		this.nomeInput.focus();
 	}
 	
 	function onPesquisaRapidaClicado(event) {
@@ -37,12 +42,40 @@ Brewer.PesquisaRapidaCliente = (function() {
 	}
 	
 	function onPesquisaConcluida(resultado) {
+		this.mensagemErro.addClass('hidden');
+		this.nomeInput.val('');
+		
 		var html = this.template(resultado);
 		this.containerTabelaPesquisaCliente.html(html);
-		this.mensagemErro.addClass('hidden');
+		
+		var tabelaClientePesquisaRapida = new Brewer.TabelaClientePesquisaRapida(this.pesquisaRapidaClientesModal);
+		tabelaClientePesquisaRapida.iniciar();
 	}
 	
 	return PesquisaRapidaCliente;
+}());
+
+Brewer.TabelaClientePesquisaRapida = (function() {
+	
+	function TabelaClientePesquisaRapida(modal) {
+		this.modalCliente = modal;
+		this.cliente = $('.js-cliente-pesquisa-rapida');
+	}
+	
+	TabelaClientePesquisaRapida.prototype.iniciar = function() {
+		this.cliente.on('click', onClienteSelecionado.bind(this));
+	}
+	
+	function onClienteSelecionado(event) {
+		this.modalCliente.modal('hide');
+		
+		var clienteSelecionado = $(event.currentTarget);
+		$('#nomeCliente').val(clienteSelecionado.data('nome'));
+		$('#codigoCliente').val(clienteSelecionado.data('codigo'));
+	}
+	
+	return TabelaClientePesquisaRapida;
+	
 }());
 
 $(function() {
