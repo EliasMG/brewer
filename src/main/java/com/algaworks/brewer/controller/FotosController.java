@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.algaworks.brewer.DTO.FotoDTO;
+import com.algaworks.brewer.dto.FotoDTO;
 import com.algaworks.brewer.storage.FotoStorage;
 import com.algaworks.brewer.storage.FotoStorageRuunable;
 

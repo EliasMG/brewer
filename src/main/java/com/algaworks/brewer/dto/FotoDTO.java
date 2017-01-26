@@ -1,4 +1,4 @@
-package com.algaworks.brewer.DTO;
+package com.algaworks.brewer.dto;
 
 public class FotoDTO {
 	
