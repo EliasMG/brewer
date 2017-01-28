@@ -5,7 +5,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,7 +22,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "venda")
@@ -47,7 +48,7 @@ public class Venda implements Serializable {
 	
 	//@NotNull(message = "Valor total é obrigatório")
 	@Column(name = "valor_total")
-	private BigDecimal valorTotal;
+	private BigDecimal valorTotal = BigDecimal.ZERO;
 	
 	//@NotNull(message = "Status é obrigatório")
 	@Enumerated(EnumType.STRING)
@@ -65,7 +66,7 @@ public class Venda implements Serializable {
 	private Usuario usuario;
 	
 	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
-	private List<ItemVenda> itens;
+	private List<ItemVenda> itens = new ArrayList<>();
 	
 	@Transient
 	private String uuid;
@@ -83,6 +84,18 @@ public class Venda implements Serializable {
 	public void adicionarItens(List<ItemVenda> itens) {
 		this.itens = itens;
 		this.itens.forEach(i -> i.setVenda(this));
+	}
+	
+	public void calcularValorTotal() {
+		BigDecimal valorTotalItens = getItens().stream()
+				.map(ItemVenda::getValorTotal)
+				.reduce(BigDecimal::add)
+				.orElse(BigDecimal.ZERO);
+		
+		BigDecimal valorTotalVenda = valorTotalItens
+				.add(Optional.ofNullable(getValorFrete()).orElse(BigDecimal.ZERO))
+				.subtract(Optional.ofNullable(getValorDesconto()).orElse(BigDecimal.ZERO));
+		setValorTotal(valorTotalVenda);
 	}
 	
 	public Long getCodigo() {

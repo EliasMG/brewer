@@ -199,6 +199,13 @@
 	border-radius: 2px !important;
 }
 
+/* Bootstrap issues */
+.has-error .input-group-btn .btn.btn-default {
+	color: #a94442;
+	border-color: #a94442;
+	background-color: #f2dede;
+}
+
 .easy-autocomplete-container ul li {
 	font-size: 1em !important;
 	padding: 0px 5px !important;
