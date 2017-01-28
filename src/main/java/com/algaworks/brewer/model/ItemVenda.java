@@ -1,13 +1,42 @@
 package com.algaworks.brewer.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ItemVenda {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+@Entity
+@Table(name = "item_venda")
+public class ItemVenda implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
+	
+	@NotNull(message = "Quantidade é obrigatória")
 	private Integer quantidade;
+	
+	@NotNull(message = "Valor é obrigatório")
+	@Column(name = "valor_unitario")
 	private BigDecimal valorUnitario;
+	
+	@ManyToOne
+	@JoinColumn(name = "codigo_cerveja")
 	private Cerveja cerveja;
+	
+	@ManyToOne
+	@JoinColumn(name = "codigo_venda")
+	private Venda venda;
 	
 	public Long getCodigo() {
 		return codigo;
@@ -38,6 +67,12 @@ public class ItemVenda {
 		return valorUnitario.multiply(new BigDecimal(quantidade));
 	}
 	
+	public Venda getVenda() {
+		return venda;
+	}
+	public void setVenda(Venda venda) {
+		this.venda = venda;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
