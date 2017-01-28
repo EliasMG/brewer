@@ -2,9 +2,12 @@ package com.algaworks.brewer.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -28,12 +32,12 @@ public class Venda implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
 	
-	@NotNull(message = "Data de criação é obrigatório")
+	//@NotNull(message = "Data de criação é obrigatório")
 	@Column(name = "data_criacao")
 	private LocalDateTime dataCriacao;
 	
-	@Column(name = "data_entrega")
-	private LocalDateTime dataEntrega;
+	@Column(name = "data_hora_entrega")
+	private LocalDateTime dataHoraEntrega;
 	
 	@Column(name = "valor_frete")
 	private BigDecimal valorFrete;
@@ -41,14 +45,14 @@ public class Venda implements Serializable {
 	@Column(name = "valor_desconto")
 	private BigDecimal valorDesconto;
 	
-	@NotNull(message = "Valor total é obrigatório")
+	//@NotNull(message = "Valor total é obrigatório")
 	@Column(name = "valor_total")
 	private BigDecimal valorTotal;
 	
-	@NotNull(message = "Status é obrigatório")
+	//@NotNull(message = "Status é obrigatório")
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status")
-	private StatusVenda statusVenda;
+	private StatusVenda statusVenda = StatusVenda.ORCAMENTO;
 	
 	private String observacao;
 	
@@ -60,8 +64,26 @@ public class Venda implements Serializable {
 	@JoinColumn(name = "codigo_usuario")
 	private Usuario usuario;
 	
-	@OneToMany(mappedBy = "venda")
+	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
 	private List<ItemVenda> itens;
+	
+	@Transient
+	private String uuid;
+	
+	@Transient
+	private LocalDate dataEntrega;
+	
+	@Transient
+	private LocalTime horaEntrega;
+
+	public boolean isNova() {
+		return codigo == null;
+	}
+	
+	public void adicionarItens(List<ItemVenda> itens) {
+		this.itens = itens;
+		this.itens.forEach(i -> i.setVenda(this));
+	}
 	
 	public Long getCodigo() {
 		return codigo;
@@ -75,11 +97,11 @@ public class Venda implements Serializable {
 	public void setDataCriacao(LocalDateTime dataCriacao) {
 		this.dataCriacao = dataCriacao;
 	}
-	public LocalDateTime getDataEntrega() {
-		return dataEntrega;
+	public LocalDateTime getDataHoraEntrega() {
+		return dataHoraEntrega;
 	}
-	public void setDataEntrega(LocalDateTime dataEntrega) {
-		this.dataEntrega = dataEntrega;
+	public void setDataHoraEntrega(LocalDateTime dataHoraEntrega) {
+		this.dataHoraEntrega = dataHoraEntrega;
 	}
 	public BigDecimal getValorFrete() {
 		return valorFrete;
@@ -131,6 +153,25 @@ public class Venda implements Serializable {
 		this.itens = itens;
 	}
 	
+	public String getUuid() {
+		return uuid;
+	}
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	
+	public LocalDate getDataEntrega() {
+		return dataEntrega;
+	}
+	public void setDataEntrega(LocalDate dataEntrega) {
+		this.dataEntrega = dataEntrega;
+	}
+	public LocalTime getHoraEntrega() {
+		return horaEntrega;
+	}
+	public void setHoraEntrega(LocalTime horaEntrega) {
+		this.horaEntrega = horaEntrega;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
