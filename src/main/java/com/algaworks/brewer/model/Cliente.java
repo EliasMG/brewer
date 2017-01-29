@@ -64,7 +64,7 @@ public class Cliente implements Serializable {
 	
 	@PrePersist @PreUpdate
 	public void prePersistPreUpdate() {
-		this.cpfOuCnpj = TipoPessoa.removerFormatação(this.cpfOuCnpj);
+		this.cpfOuCnpj = TipoPessoa.removerFormatacao(this.cpfOuCnpj);
 	}
 	
 	@PostLoad
@@ -129,7 +129,7 @@ public class Cliente implements Serializable {
 	}
 	
 	public String getCpfOuCnpjSemFormatacao() {
-		return TipoPessoa.removerFormatação(this.cpfOuCnpj);
+		return TipoPessoa.removerFormatacao(this.cpfOuCnpj);
 	}
 
 	@Override
