@@ -1,5 +1,6 @@
 package com.algaworks.brewer.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import javax.persistence.Column;
@@ -14,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
@@ -27,8 +29,10 @@ import com.algaworks.brewer.validation.SKU;
 
 @Entity
 @Table(name = "cerveja")
-public class Cerveja {
-	
+public class Cerveja implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
@@ -81,10 +85,17 @@ public class Cerveja {
 	@Column(name = "content_type")
 	private String contentType;
 	
+	@Transient
+	private boolean novaFoto;
+	
 	@PrePersist
 	@PreUpdate
 	private void prePersistUpdate() {
 		sku = sku.toUpperCase();
+	}
+	
+	public boolean isNova() {
+		return codigo == null;
 	}
 	
 	public Long getCodigo() {
@@ -172,6 +183,14 @@ public class Cerveja {
 	
 	public String getFotoOuMock() {
 		return !StringUtils.isEmpty(foto) ? foto : "cerveja-mock.png";
+	}
+
+	public boolean isNovaFoto() {
+		return novaFoto;
+	}
+
+	public void setNovaFoto(boolean novaFoto) {
+		this.novaFoto = novaFoto;
 	}
 
 	@Override
