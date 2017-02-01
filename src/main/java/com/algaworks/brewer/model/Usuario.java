@@ -68,6 +68,10 @@ public class Usuario implements Serializable {
 		return codigo == null;
 	}
 	
+	public boolean isEdicao() {
+		return codigo != null;
+	}
+	
 	public Long getCodigo() {
 		return codigo;
 	}
