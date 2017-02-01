@@ -12,7 +12,7 @@ import com.algaworks.brewer.repository.helper.usuario.UsuariosQueries;
 @Repository
 public interface Usuarios extends JpaRepository<Usuario, Long>, UsuariosQueries {
 
-	public Optional<Usuario> findByEmail(String email);
+	public Optional<Usuario> findByEmailOrCodigo(String email, Long codigo);
 
 	public List<Usuario> findByCodigoIn(Long[] codigos);
 

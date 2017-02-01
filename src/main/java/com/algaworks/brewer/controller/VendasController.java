@@ -154,6 +154,15 @@ public class VendasController {
 		mv.addObject("pagina", paginaWrapper);
 		return mv;
 	}
+	
+	@GetMapping("/{codigo}")
+	public ModelAndView editar(@PathVariable Long codigo) {
+		Venda venda = vendas.buscarComItens(codigo);
+		
+		ModelAndView mv = nova(venda);
+		mv.addObject(venda);
+		return mv;
+	}
 
 	private ModelAndView mvTabelaItensVenda(String uuid) {
 		ModelAndView mv = new ModelAndView("venda/TabelaItensVenda");
