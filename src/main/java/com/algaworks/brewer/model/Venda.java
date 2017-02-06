@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,8 +24,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 @Entity
 @Table(name = "venda")
+@DynamicUpdate
 public class Venda implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -65,7 +69,7 @@ public class Venda implements Serializable {
 	@JoinColumn(name = "codigo_usuario")
 	private Usuario usuario;
 	
-	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ItemVenda> itens = new ArrayList<>();
 	
 	@Transient
@@ -96,6 +100,19 @@ public class Venda implements Serializable {
 				.add(Optional.ofNullable(getValorFrete()).orElse(BigDecimal.ZERO))
 				.subtract(Optional.ofNullable(getValorDesconto()).orElse(BigDecimal.ZERO));
 		setValorTotal(valorTotalVenda);
+	}
+	
+	public Long getDiasCriacao() {
+		LocalDate inicio = dataCriacao != null ? dataCriacao.toLocalDate() : LocalDate.now();
+		return ChronoUnit.DAYS.between(inicio, LocalDate.now());
+	}
+	
+	public boolean isSalvarPermitido() {
+		return !statusVenda.equals(StatusVenda.CANCELADA);
+	}
+	
+	public boolean isSalvarProibido() {
+		return !isSalvarPermitido();
 	}
 	
 	public Long getCodigo() {
