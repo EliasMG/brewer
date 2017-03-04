@@ -192,6 +192,10 @@ public class Cerveja implements Serializable{
 	public void setNovaFoto(boolean novaFoto) {
 		this.novaFoto = novaFoto;
 	}
+	
+	public boolean temFoto() {
+		return !StringUtils.isEmpty(this.foto);
+	}
 
 	@Override
 	public int hashCode() {

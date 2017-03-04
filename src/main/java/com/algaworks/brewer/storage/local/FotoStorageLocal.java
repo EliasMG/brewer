@@ -32,6 +32,11 @@ public class FotoStorageLocal implements FotoStorage {
 		this.local = path;
 		criarPastas();
 	}
+	
+	@Override
+	public byte[] recuperarThumbnail(String fotoCerveja) {
+		return recuperar("thumbnail." + fotoCerveja);
+	}
 
 	private void criarPastas() {
 		try {
@@ -119,5 +124,4 @@ public class FotoStorageLocal implements FotoStorage {
 			LOGGER.warn(String.format("Erro apagando foto '%s'. Mensagem: %s", foto, e.getMessage()));
 		}
 	}
-
 }
