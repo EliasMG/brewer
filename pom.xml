@@ -18,7 +18,7 @@
 		<java.version>1.8</java.version>
 		<maven-compiler-pluging.version>3.2</maven-compiler-pluging.version>
 		<flyway-maven-plugin.version>4.0.2</flyway-maven-plugin.version>
-		<mysql-connector-java.version>5.1.39</mysql-connector-java.version>
+		<postgresql-connector-java.version>9.1-901-1.jdbc4</postgresql-connector-java.version>
 		
 		<!-- Spring MVC -->
 		<spring-framework.version>4.3.2.RELEASE</spring-framework.version>
@@ -92,7 +92,7 @@
 				<artifactId>flyway-maven-plugin</artifactId>
 				<version>${flyway-maven-plugin.version}</version>
 				<configuration>
-					<driver>com.mysql.jdbc.Driver</driver>
+					<driver>org.postgresql.Driver</driver>
 				</configuration>
 			</plugin>
 			
@@ -198,12 +198,12 @@
     		<scope>compile</scope>
 		</dependency>
 		
-		<!-- MySQL Driver -->
+		<!-- PostgreSQL Driver -->
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql-connector-java.version}</version>
-			<scope>provided</scope>
+		    <groupId>postgresql</groupId>
+		    <artifactId>postgresql</artifactId>
+		    <version>${postgresql-connector-java.version}</version>
+		    <scope>provided</scope>
 		</dependency>
 		
 		<!-- Spring Data JPA -->
